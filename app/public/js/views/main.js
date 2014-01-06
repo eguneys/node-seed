@@ -2,24 +2,13 @@ var ContainerView = Backbone.View.extend({
     el: "#container",
     
     initialize: function (options) {
-
 	this.eventBus = options.eventBus;
 
-	this.vent = _.extend({}, Backbone.Events);
-	_.bindAll(this, "changeState");
-	this.vent.bind("changeState", this.changeState);
-	
-	this.state = LoginView;
-	this.render();
-    },
-
-    changeState: function(view) {
-	this.state = view;
-	this.render();
+	this.model.on("change:viewState", this.render, this);
     },
 
     render: function() {
-	var view = new this.state({ vent: this.vent});
+	var view = this.model.get('viewState');
 	this.$el.html(view.render().el);
     }
 });
@@ -43,19 +32,124 @@ var LoginView = Backbone.View.extend({
     },
 
     onLogin: function() {
-	this.vent.trigger("changeState", HomeView);
+	this.vent.trigger("login", this.$('#nameText').val());
     }
 });
 
 var HomeView = Backbone.View.extend({
     template: _.template($('#home-template').html()),
 
-    initialize: function(parent) {
-	this.parent = parent;
+    events: {
+	'click .room': 'onRoomClick',
+	'click #PlayNow': 'onPlayClick'
+    },
+    
+    initialize: function(options) {
+	this.vent = options.vent;
+
+	this.model.submodels.liveRooms.on("add", this.renderRoomListView, this);
+
+	this.model.submodels.joinedRooms.on("add", this.renderRoomTabView, this);
+    },
+
+    renderRoomListView: function(room) {
+	    var room = room.get('room');
+	    var template = _.template($('#room-listview-template').html());
+	    this.$("#roomList").append(template({id: room.getRoom().getRoomId(), name: room.getRoom().getName()}));
+    },
+
+    renderRoomTabView: function(roomM) {
+	    var room = roomM.get('room');
+
+	    var template = _.template("<li><a href='#tab<%=id%>' data-toggle='tab'><%=name%></a></li>");
+	    this.$('#roomTabs').append(template({id: room.getRoomId(), name: room.getName()}));
+
+	    var chatViewEl = new RoomChatView({model: roomM, vent: this.vent}).render().el;
+	    
+	    this.$("#roomTabContents").append(chatViewEl);
     },
 
     render: function() {
 	this.$el.html(this.template());
+	
+	this.model.submodels.liveRooms.each(function(roomM) {
+	    this.renderRoomListView(roomM);
+	});
+
+	this.model.submodels.joinedRooms.each(function(roomM) {
+	    this.renderRoomTabView(roomM);
+	});
 	return this;
+    },
+
+    onPlayClick: function() {
+	this.vent.trigger("playNow");
+    },
+
+    onRoomClick: function(ev) {
+	this.vent.trigger("joinRoom", $(ev.target).attr('id'));
+    }
+});
+
+var RoomUsersView = Backbone.View.extend({
+    template: _.template($('#room-users-template').html()),
+
+    initialize: function(options) {
+	this.vent = options.vent;
+
+	
+    },
+
+    
+});
+
+
+
+var RoomChatView = Backbone.View.extend({
+    template: _.template($('#room-chat-template').html()),
+
+    initialize: function(options) {
+	this.vent = options.vent;
+
+	this.model.on("change:chatMessagesChangeNotify", this.renderChat, this);
+    },
+    
+    events: {
+	"keypress #chatInputBox": "onChat"
+    },
+
+    renderChat: function() {
+	this.model.updateChat();
+
+	var template = _.template("<li><span class='text-info'><%= sender %></span>: <%= chat %></li>");
+
+	var newMessage = this.model.get('chatMessagesChangeNotify');
+	
+	var newChat = this.$("#chatList").append(template({chat: newMessage.getChat(), sender: newMessage.getSender()}));
+
+	
+	$('.nano').nanoScroller();
+	$('.nano').nanoScroller({ scroll: 'bottom'});
+	
+	
+    },
+    
+    render: function() {
+	var room = this.model.get('room');
+
+	this.setElement(this.template(this.model.toJSON()));
+
+	return this;
+    },
+
+    onChat: function(ev) {
+	var room = this.model.get('room');
+	
+	if (ev.charCode == 13) {
+	    this.vent.trigger("chat",{ value: this.$("#chatInputBox").val(), id: room.getRoomId()});
+	    this.$("#chatInputBox").val("");
+
+	    return false;
+	}
     }
 });

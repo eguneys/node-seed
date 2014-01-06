@@ -1,21 +1,37 @@
 var MainApp = function(options) {
     var self = this;
 
-    self.apiKey = "6370cad1755fd5fb369b170a03c7679ea444f3490e03f32867ecb1c847230cc0";
-    self.secretKey = "de3ca688d71db054f3e8d133008af08c6c14f49ebee830d95405b889bc3b4516";
-
-
     self.eventBus = options.eventBus;
+
+    self.apiKey = "9941f8f9-bfb7-4c23-b";
+    self.secretKey = "localhost";
     
     self.connect = function(nameId) {
 	AppWarp.WarpClient.initialize(self.apiKey, self.secretKey);
 	self._warpclient = AppWarp.WarpClient.getInstance();
 
-	self.ResponseHandlers = new ResponseHandlers(self._warpclient);
+	self.ResponseHandlers = new ResponseHandlers(self._warpclient, self.eventBus);
 	self.setResponseListeners(self._warpclient);
 
-	self._warpclient.connect(nameId);
-    }
+	self._warpclient.connect(nameId, "");
+    };
+
+    self.createRoom = function(name, owner) {
+	self._warpclient.createRoom(name, owner, 4, null);
+    };
+
+    self.createTurnRoom = function(name, owner) {
+	self._warpclient.createTurnRoom(name, owner, 4, null, 24);
+    };
+
+    self.joinRoom = function(id) {
+	self._warpclient.joinRoom(id);
+    };
+
+
+    self.sendChat = function(chat) {
+	self._warpclient.sendChat(chat);
+    };
 
     self.setResponseListeners = function() {
 	var _warpclient = self._warpclient;
@@ -27,37 +43,64 @@ var MainApp = function(options) {
         _warpclient.setResponseListener(AppWarp.Events.onSubscribeRoomDone, self.ResponseHandlers.onSubscribeRoomDone);
         _warpclient.setResponseListener(AppWarp.Events.onLeaveRoomDone, self.ResponseHandlers.onLeaveRoomDone);
         _warpclient.setResponseListener(AppWarp.Events.onUnsubscribeRoomDone, self.ResponseHandlers.onUnsubscribeRoomDone);
-        _warpclient.setNotifyListener(AppWarp.Events.onChatReceived, self.ResponseHandlers.onChatReceived);
+	_warpclient.setResponseListener(AppWarp.Events.onCreateRoomDone, self.ResponseHandlers.onCreateRoomDone);
+
+	_warpclient.setNotifyListener(AppWarp.Events.onChatReceived, self.ResponseHandlers.onChatReceived);
+
+	_warpclient.setNotifyListener(AppWarp.Events.onGameStarted, self.ResponseHandlers.onGameStarted);
+	_warpclient.setNotifyListener(AppWarp.Events.onMoveCompleted, self.ResponseHandlers.onMoveCompleted);
     }
+
+    // auto join when a room is created
+    self.eventBus.on("createRoomDone", function(room) {
+	self.joinRoom(room.getRoomId());
+    });
+
 };
 
 
 
-var ResponseHandlers = function(warpClient) {
+var ResponseHandlers = function(warpClient, eventBus) {
     var self = this;
 
     self._warpclient = warpClient;
+    self._eventBus = eventBus;
     
     self.onConnectDone = function(res) {
 	if (res == AppWarp.ResultCode.Success)
 	{
-	    console.log("connected");
+	    self._eventBus.trigger("connectDone");
 	    self._warpclient.getAllRooms();
 	}  else {
+	    console.log(res);
 	}
     };
 
     self.onGetAllRoomsDone = function(rooms) {
-	console.log(rooms);
+	for (var i = 0; i< rooms.getRoomIds().length; ++i) {
+	    self._warpclient.getLiveRoomInfo(rooms.getRoomIds()[i]);
+	}
     };
     
     self.onGetLiveRoomInfo = function(room) {
+	self._eventBus.trigger("liveRoomInfo", room);
     };
     
-    self.JoinRoomDone = function(room) {
+    self.onJoinRoomDone = function(room) {
+	if (room.getResult() == AppWarp.ResultCode.Success) {
+	   self._warpclient.subscribeRoom(room.getRoomId());
+	} else {
+	    console.log('err: ' + room.getResult());
+	}
     };
     
     self.onSubscribeRoomDone = function(room) {
+	if (room.getResult() == AppWarp.ResultCode.Success) {
+	    self._eventBus.trigger("subscribeRoomDone", room);
+	} else {
+	    console.log('err: ' + room.getResult());
+	}
+	
     };
     
     self.onLeaveRoomDone = function(room) {
@@ -66,7 +109,29 @@ var ResponseHandlers = function(warpClient) {
     self.onUnsubscribeRoomDone = function(room) {
     };
 
-    self.onChatReceived = function(chat) {
 
+
+    self.onCreateRoomDone = function(room) {
+	if (room.getResult() == AppWarp.ResultCode.Success) {
+	    self._eventBus.trigger("createRoomDone", room);
+	} else {
+	    console.log("err : " + room.getResult());
+	}
+    };
+    
+
+    
+    // Notify Listeners
+    self.onChatReceived = function(chat) {
+	self._eventBus.trigger("chatReceived", chat);
+    };
+
+    self.onGameStarted = function(sender, room, nextTurn) {
+	self._eventBus.trigger("gameStarted", {sender: sender, room: room, nextTurn: nextTurn });
+	
+    };
+
+    self.onMoveCompleted = function(move) {
+	self._eventBus.trigger("moveCompleted", move);
     };
 }

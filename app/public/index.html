@@ -3,6 +3,9 @@
     <title>First app</title>
 
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="/css/lib/nanoscroller.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
   </head>
 
   <body>
@@ -35,27 +38,55 @@
 	<div class="col-lg-2">
 	  <div class="panel panel-default">
 	    <div class="panel-heading">
-	      <h2 class="panel-title"> <strong class="text-info">Users</strong></h2>
+	      <h2 class="panel-title"> <strong class="text-info">Rooms</strong></h2>
 	    </div>
 	    <div class="scrollDiv">
-	      <div class="list-group list-group-flush">
-		<a class="list-group-item active">
-		  Admin
-		</a>
-		<a class="list-group-item">
-		  Test
-		</a>
+	      <div class="list-group list-group-flush" id="roomList">
+		
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	<div class="col-lg-8">
+
+	  <ul class="nav nav-tabs" id="roomTabs"> 
+	    <li><a href="#HomeTab" data-toggle="tab">Home</a></li>
+	  </ul>
+
+	  <div class="tab-content" id="roomTabContents">
+
+	    <div class="tab-pane active" id="HomeTab">
+	      <button class="btn btn-default" id="PlayNow"> Play now </button>
+	    </div>
+	  </div>
 	  
 	</div>
 	<div class="col-lg-2">
 
 	</div>
       </div>
+    </script>
+
+    <script type='text/template' id="room-listview-template">
+      <a class="list-group-item room" id="<%=id%>"><%= name %></a>
+    </script>
+
+    <script type='text/template' id="room-chat-template">
+      <div class="tab-pane" id="tab<%=id%>">
+	<div class="nano">
+	    <ul class="content list-unstyled chatList" id="chatList">
+	    
+	    </ul>
+	</div>
+
+	<form>
+	  <input class="form-control input-block" type="text" placeholder="Chat here" id="chatInputBox">
+	</form>
+      </div>
+    </script>
+
+    <script type='text/template' id="room-users-template">
+      
     </script>
 
     <script type='text/template' id="login-template">
@@ -81,9 +112,11 @@
 
     <script src="/js/lib/hmac-sha1.js"></script>
     <script src="/js/lib/appwarp.js"></script>
+    <script src="/js/lib/jquery.nanoscroller.js"></script>
 
     <script src="/js/warpclient.js"></script>
 
+    <script src="/js/models/main.js"></script>
     <script src="/js/views/main.js"></script>
     <script src="/js/main.js"></script>
 

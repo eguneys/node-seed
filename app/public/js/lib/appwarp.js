@@ -113,6 +113,7 @@ var AppWarp;
         RequestType[RequestType["LockProperties"] = 35] = "LockProperties";
         RequestType[RequestType["UnlockProperties"] = 36] = "UnlockProperties";
 
+        RequestType[RequestType["RPC"] = 62] = "RPC";
         RequestType[RequestType["KeepAlive"] = 63] = "KeepAlive";
         RequestType[RequestType["AssocPort"] = 64] = "AssocPort";
         RequestType[RequestType["AssocPortAck"] = 65] = "AssocPortAck";
@@ -121,6 +122,8 @@ var AppWarp;
         RequestType[RequestType["StartGame"] = 66] = "StartGame";
         RequestType[RequestType["StopGame"] = 67] = "StopGame";
         RequestType[RequestType["GetMoveHistory"] = 68] = "GetMoveHistory";
+        RequestType[RequestType["ZoneRPC"] = 69] = "ZoneRPC";
+        RequestType[RequestType["RoomRPC"] = 70] = "RoomRPC";
     })(AppWarp.RequestType || (AppWarp.RequestType = {}));
     var RequestType = AppWarp.RequestType;
 
@@ -200,37 +203,39 @@ var AppWarp;
         Events[Events["onUpdatePropertyDone"] = 13] = "onUpdatePropertyDone";
         Events[Events["onLockPropertiesDone"] = 14] = "onLockPropertiesDone";
         Events[Events["onUnlockPropertiesDone"] = 15] = "onUnlockPropertiesDone";
+        Events[Events["onRoomRPCDone"] = 16] = "onRoomRPCDone";
 
-        Events[Events["onCreateRoomDone"] = 16] = "onCreateRoomDone";
-        Events[Events["onDeleteRoomDone"] = 17] = "onDeleteRoomDone";
-        Events[Events["onGetAllRoomsDone"] = 18] = "onGetAllRoomsDone";
-        Events[Events["onGetOnlineUsersDone"] = 19] = "onGetOnlineUsersDone";
-        Events[Events["onGetLiveUserInfoDone"] = 20] = "onGetLiveUserInfoDone";
-        Events[Events["onSetCustomUserDataDone"] = 21] = "onSetCustomUserDataDone";
-        Events[Events["onGetMatchedRoomsDone"] = 22] = "onGetMatchedRoomsDone";
+        Events[Events["onCreateRoomDone"] = 17] = "onCreateRoomDone";
+        Events[Events["onDeleteRoomDone"] = 18] = "onDeleteRoomDone";
+        Events[Events["onGetAllRoomsDone"] = 19] = "onGetAllRoomsDone";
+        Events[Events["onGetOnlineUsersDone"] = 20] = "onGetOnlineUsersDone";
+        Events[Events["onGetLiveUserInfoDone"] = 21] = "onGetLiveUserInfoDone";
+        Events[Events["onSetCustomUserDataDone"] = 22] = "onSetCustomUserDataDone";
+        Events[Events["onGetMatchedRoomsDone"] = 23] = "onGetMatchedRoomsDone";
+        Events[Events["onZoneRPCDone"] = 24] = "onZoneRPCDone";
 
-        Events[Events["onRoomCreated"] = 23] = "onRoomCreated";
-        Events[Events["onRoomDestroyed"] = 24] = "onRoomDestroyed";
-        Events[Events["onUserLeftRoom"] = 25] = "onUserLeftRoom";
-        Events[Events["onUserJoinedRoom"] = 26] = "onUserJoinedRoom";
-        Events[Events["onUserLeftLobby"] = 27] = "onUserLeftLobby";
-        Events[Events["onUserJoinedLobby"] = 28] = "onUserJoinedLobby";
-        Events[Events["onChatReceived"] = 29] = "onChatReceived";
-        Events[Events["onUpdatePeersReceived"] = 30] = "onUpdatePeersReceived";
-        Events[Events["onUserChangeRoomProperty"] = 31] = "onUserChangeRoomProperty";
-        Events[Events["onPrivateChatReceived"] = 32] = "onPrivateChatReceived";
-        Events[Events["onMoveCompleted"] = 33] = "onMoveCompleted";
-        Events[Events["onGameStarted"] = 34] = "onGameStarted";
-        Events[Events["onGameStopped"] = 35] = "onGameStopped";
+        Events[Events["onRoomCreated"] = 25] = "onRoomCreated";
+        Events[Events["onRoomDestroyed"] = 26] = "onRoomDestroyed";
+        Events[Events["onUserLeftRoom"] = 27] = "onUserLeftRoom";
+        Events[Events["onUserJoinedRoom"] = 28] = "onUserJoinedRoom";
+        Events[Events["onUserLeftLobby"] = 29] = "onUserLeftLobby";
+        Events[Events["onUserJoinedLobby"] = 30] = "onUserJoinedLobby";
+        Events[Events["onChatReceived"] = 31] = "onChatReceived";
+        Events[Events["onUpdatePeersReceived"] = 32] = "onUpdatePeersReceived";
+        Events[Events["onUserChangeRoomProperty"] = 33] = "onUserChangeRoomProperty";
+        Events[Events["onPrivateChatReceived"] = 34] = "onPrivateChatReceived";
+        Events[Events["onMoveCompleted"] = 35] = "onMoveCompleted";
+        Events[Events["onGameStarted"] = 36] = "onGameStarted";
+        Events[Events["onGameStopped"] = 37] = "onGameStopped";
 
-        Events[Events["onSendChatDone"] = 36] = "onSendChatDone";
-        Events[Events["onSendPrivateChatDone"] = 37] = "onSendPrivateChatDone";
-        Events[Events["onSendUpdateDone"] = 38] = "onSendUpdateDone";
+        Events[Events["onSendChatDone"] = 38] = "onSendChatDone";
+        Events[Events["onSendPrivateChatDone"] = 39] = "onSendPrivateChatDone";
+        Events[Events["onSendUpdateDone"] = 40] = "onSendUpdateDone";
 
-        Events[Events["onSendMoveDone"] = 39] = "onSendMoveDone";
-        Events[Events["onStartGameDone"] = 40] = "onStartGameDone";
-        Events[Events["onStopGameDone"] = 41] = "onStopGameDone";
-        Events[Events["onGetMoveHistoryDone"] = 42] = "onGetMoveHistoryDone";
+        Events[Events["onSendMoveDone"] = 41] = "onSendMoveDone";
+        Events[Events["onStartGameDone"] = 42] = "onStartGameDone";
+        Events[Events["onStopGameDone"] = 43] = "onStopGameDone";
+        Events[Events["onGetMoveHistoryDone"] = 44] = "onGetMoveHistoryDone";
     })(AppWarp.Events || (AppWarp.Events = {}));
     var Events = AppWarp.Events;
 })(AppWarp || (AppWarp = {}));
@@ -487,23 +492,15 @@ var AppWarp;
             return bytearray;
         };
 
-        RequestBuilder.buildAuthRequest = function (apiKey, secreteKey, user) {
+        RequestBuilder.buildAuthRequest = function (apiKey, user, authData) {
             var timeStamp = AppWarp.Utility.getODataUTCDateFilter();
-            var params = "";
-            params += "apiKey" + apiKey;
-            params += "timeStamp" + timeStamp;
-            params += "user" + user;
-            params += "version" + "JS_1.2";
-
-            var hmac = AppWarp.CryptoJS.HmacSHA1(params, secreteKey).toString();
-            var signature = encodeURIComponent(AppWarp.Utility.base64_encode(AppWarp.Utility.hex2bin(hmac)));
 
             var json = {};
             json.apiKey = apiKey;
             json.version = "JS_1.2";
             json.timeStamp = timeStamp;
             json.user = user;
-            json.signature = signature;
+            json.authData = authData;
             json.keepalive = 6;
 
             return JSON.stringify(json);
@@ -631,10 +628,8 @@ else
             if (properties != null)
                 params.addOrUpdate = properties;
 
-            if (turnTime >= 0) {
+            if (turnTime >= 0)
                 params.turnTime = turnTime;
-                params.inox = true;
-            }
 
             return JSON.stringify(params);
         };
@@ -648,6 +643,21 @@ else
         RequestBuilder.buildGetMoveHistoryRequest = function () {
             var params = {};
             params.count = 5;
+            return JSON.stringify(params);
+        };
+
+        RequestBuilder.buildZoneRPCRequest = function (func, args) {
+            var params = {};
+            params.function = func;
+            params.args = args;
+            return JSON.stringify(params);
+        };
+
+        RequestBuilder.buildRoomRPCRequest = function (room, func, args) {
+            var params = {};
+            params.function = func;
+            params.args = args;
+            params.roomId = room;
             return JSON.stringify(params);
         };
         return RequestBuilder;
@@ -861,10 +871,10 @@ var AppWarp;
                 }
             }, 500);
         }
-        WarpClient.initialize = function (API_KEY, Secret_KEY, server) {
+        WarpClient.initialize = function (API_KEY, server) {
             if (typeof server === "undefined") { server = ""; }
             WarpClient.apiKey = API_KEY;
-            WarpClient.secretKey = Secret_KEY;
+
             WarpClient.serverAddress = server;
         };
 
@@ -1037,6 +1047,26 @@ var AppWarp;
                     }
                     this.responseCallbacks[AppWarp.Events.onGetMoveHistoryDone](res.getResultCode(), moves);
                 }
+            } else if (res.getRequestType() == AppWarp.RequestType.ZoneRPC) {
+                console.log(res.getResultCode(), res.getPayloadString());
+                if (this.responseCallbacks[AppWarp.Events.onZoneRPCDone]) {
+                    if (res.getResultCode() == 0) {
+                        var ret = JSON.parse(res.getPayloadString());
+                        this.responseCallbacks[AppWarp.Events.onZoneRPCDone](res.getResultCode(), ret);
+                    } else {
+                        this.responseCallbacks[AppWarp.Events.onZoneRPCDone](res.getResultCode(), "");
+                    }
+                }
+            } else if (res.getRequestType() == AppWarp.RequestType.RoomRPC) {
+                console.log(res.getResultCode(), res.getPayloadString());
+                if (this.responseCallbacks[AppWarp.Events.onRoomRPCDone]) {
+                    if (res.getResultCode() == 0) {
+                        var ret = JSON.parse(res.getPayloadString());
+                        this.responseCallbacks[AppWarp.Events.onRoomRPCDone](res.getResultCode(), ret);
+                    } else {
+                        this.responseCallbacks[AppWarp.Events.onRoomRPCDone](res.getResultCode(), "");
+                    }
+                }
             }
 
             return 9 + res.getPayloadSize();
@@ -1105,8 +1135,8 @@ var AppWarp;
             return 8 + res.getPayloadSize();
         };
 
-        WarpClient.prototype.joinZone = function (user) {
-            var payload = AppWarp.RequestBuilder.buildAuthRequest(WarpClient.apiKey, WarpClient.secretKey, user);
+        WarpClient.prototype.joinZone = function (user, authData) {
+            var payload = AppWarp.RequestBuilder.buildAuthRequest(WarpClient.apiKey, user, authData);
             var data = AppWarp.RequestBuilder.buildWarpRequest(this.SessionID, AppWarp.RequestType.Auth, payload, true);
             this.sendMessage(data.buffer);
         };
@@ -1129,7 +1159,7 @@ var AppWarp;
                 delete this.updateCallbacks[evnt];
         };
 
-        WarpClient.prototype.connect = function (user) {
+        WarpClient.prototype.connect = function (user, authData) {
             if (WarpClient.serverAddress == "") {
                 var xmlHttp = new XMLHttpRequest();
                 var that = this;
@@ -1143,7 +1173,7 @@ var AppWarp;
 
                             that.socket.onopen = function () {
                                 if (user) {
-                                    that.joinZone(user);
+                                    that.joinZone(user, authData);
                                 } else {
                                     if (that.responseCallbacks[AppWarp.Events.onConnectDone])
                                         that.responseCallbacks[AppWarp.Events.onConnectDone](AppWarp.ResultCode.BadRequest);
@@ -1174,7 +1204,7 @@ var AppWarp;
                 var that = this;
                 this.socket.onopen = function () {
                     if (user) {
-                        that.joinZone(user);
+                        that.joinZone(user, authData);
                     } else {
                         if (that.responseCallbacks[AppWarp.Events.onConnectDone])
                             that.responseCallbacks[AppWarp.Events.onConnectDone](AppWarp.ResultCode.BadRequest);
@@ -1421,6 +1451,26 @@ var AppWarp;
         WarpClient.prototype.getMoveHistory = function () {
             var payload = AppWarp.RequestBuilder.buildGetMoveHistoryRequest();
             var data = AppWarp.RequestBuilder.buildWarpRequest(this.SessionID, AppWarp.RequestType.GetMoveHistory, payload, true);
+            this.sendMessage(data.buffer);
+        };
+
+        WarpClient.prototype.invokeZoneRPC = function (func) {
+            var args = new Array();
+            for (var i = 1; i < arguments.length; ++i) {
+                args[i - 1] = arguments[i];
+            }
+            var payload = AppWarp.RequestBuilder.buildZoneRPCRequest(func, args);
+            var data = AppWarp.RequestBuilder.buildWarpRequest(this.SessionID, AppWarp.RequestType.ZoneRPC, payload, true);
+            this.sendMessage(data.buffer);
+        };
+
+        WarpClient.prototype.invokeRoomRPC = function (room, func) {
+            var args = new Array();
+            for (var i = 2; i < arguments.length; ++i) {
+                args[i - 2] = arguments[i];
+            }
+            var payload = AppWarp.RequestBuilder.buildRoomRPCRequest(room, func, args);
+            var data = AppWarp.RequestBuilder.buildWarpRequest(this.SessionID, AppWarp.RequestType.RoomRPC, payload, true);
             this.sendMessage(data.buffer);
         };
         WarpClient.instance = null;
