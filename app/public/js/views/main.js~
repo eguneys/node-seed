@@ -1,0 +1,3 @@
+var ContainerView = new Backbone.View.extend({
+    
+});

@@ -1,0 +1,8 @@
+var AppWarpModel = Backbone.Model.extend({
+    apiKey: "",
+    secretKey: "",
+
+    _warpClient: {},
+    
+    
+});
