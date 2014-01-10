@@ -48,14 +48,30 @@ var HomeView = Backbone.View.extend({
 	this.vent = options.vent;
 
 	this.model.submodels.liveRooms.on("add", this.renderRoomListView, this);
-
 	this.model.submodels.joinedRooms.on("add", this.renderRoomTabView, this);
+
+	this.model.submodels.gameRooms.on("add", this.renderGameRoom, this);
+    },
+
+    renderGameRoom: function(gameRoom) {
+	    var room = gameRoom.get('room');
+
+	    var template = _.template("<li><a href='#tab<%=id%>' data-toggle='tab'><%=name%></a></li>");
+	    this.$('#roomTabs').append(template({id: room.getRoomId(), name: room.getName()}));
+
+	var gameView = new RoomGameView({model: gameRoom, vent: this.vent});
+
+	    var gameViewEl = gameView.render().el;
+	    
+	    this.$("#roomTabContents").append(gameViewEl);
+
+	gameView.buildScene();
     },
 
     renderRoomListView: function(room) {
 	    var room = room.get('room');
 	    var template = _.template($('#room-listview-template').html());
-	    this.$("#roomList").append(template({id: room.getRoom().getRoomId(), name: room.getRoom().getName()}));
+	    this.$("#roomList").append(template({id: room.getRoom().getRoomId(), name: room.getRoom().getName(), data: room.getCustomData(), users: room.getUsers()}));
     },
 
     renderRoomTabView: function(roomM) {

@@ -1,0 +1,11 @@
+
+GameConstants = {
+    PLAYER_HAND: 1,
+    
+    ME_DRAW_CARD_MIDDLE: 5,
+    ME_DRAW_CARD_SIDE: 6,
+    ME_THROW_CARD: 7,
+    ME_FINISHED: 8,
+
+    ME_DRAW_CARD_MIDDLE_INFO: 10
+}

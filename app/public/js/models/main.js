@@ -29,11 +29,14 @@ var ContainerModel = Backbone.Model.extend({
 });
 
 
+
+
 var HomeModel = Backbone.Model.extend({
 
     submodels: {
 	liveRooms: new RoomCollection(),
-	joinedRooms: new RoomCollection()
+	joinedRooms: new RoomCollection(),
+	gameRooms: new GameRoomCollection()
     },
     
     initialize: function() {

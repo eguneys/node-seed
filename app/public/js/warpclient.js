@@ -16,12 +16,16 @@ var MainApp = function(options) {
 	self._warpclient.connect(nameId, "");
     };
 
+    self.getLiveRoomInfo = function(id) {
+	self._warpclient.getLiveRoomInfo(id);
+    }
+
     self.createRoom = function(name, owner) {
 	self._warpclient.createRoom(name, owner, 4, null);
     };
 
     self.createTurnRoom = function(name, owner) {
-	self._warpclient.createTurnRoom(name, owner, 4, null, 24);
+	self._warpclient.createTurnRoom(name, owner, 4, {type: "game"}, 240);
     };
 
     self.joinRoom = function(id) {
@@ -31,6 +35,10 @@ var MainApp = function(options) {
 
     self.sendChat = function(chat) {
 	self._warpclient.sendChat(chat);
+    };
+
+    self.sendMove = function(move) {
+	self._warpclient.sendMove(move);
     };
 
     self.setResponseListeners = function() {
@@ -45,8 +53,11 @@ var MainApp = function(options) {
         _warpclient.setResponseListener(AppWarp.Events.onUnsubscribeRoomDone, self.ResponseHandlers.onUnsubscribeRoomDone);
 	_warpclient.setResponseListener(AppWarp.Events.onCreateRoomDone, self.ResponseHandlers.onCreateRoomDone);
 
+	_warpclient.setResponseListener(AppWarp.Events.onSendMoveDone, self.ResponseHandlers.onSendMoveDone);
+
 	_warpclient.setNotifyListener(AppWarp.Events.onChatReceived, self.ResponseHandlers.onChatReceived);
 
+	_warpclient.setNotifyListener(AppWarp.Events.onUserJoinedRoom, self.ResponseHandlers.onUserJoinedRoom);
 	_warpclient.setNotifyListener(AppWarp.Events.onGameStarted, self.ResponseHandlers.onGameStarted);
 	_warpclient.setNotifyListener(AppWarp.Events.onMoveCompleted, self.ResponseHandlers.onMoveCompleted);
     }
@@ -118,12 +129,19 @@ var ResponseHandlers = function(warpClient, eventBus) {
 	    console.log("err : " + room.getResult());
 	}
     };
-    
+
+    self.onSendMoveDone = function(event) {
+	console.log(event);
+    }
 
     
     // Notify Listeners
     self.onChatReceived = function(chat) {
 	self._eventBus.trigger("chatReceived", chat);
+    };
+
+    self.onUserJoinedRoom = function(room, user) {
+	self._eventBus.trigger("userJoinedRoom", { room: room, username: user});
     };
 
     self.onGameStarted = function(sender, room, nextTurn) {

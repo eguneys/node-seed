@@ -47,7 +47,7 @@
 	    </div>
 	  </div>
 	</div>
-	<div class="col-lg-8">
+	<div class="col-lg-10">
 
 	  <ul class="nav nav-tabs" id="roomTabs"> 
 	    <li><a href="#HomeTab" data-toggle="tab">Home</a></li>
@@ -61,22 +61,22 @@
 	  </div>
 	  
 	</div>
-	<div class="col-lg-2">
-
-	</div>
       </div>
     </script>
 
     <script type='text/template' id="room-listview-template">
-      <a class="list-group-item room" id="<%=id%>"><%= name %></a>
+      <a class="list-group-item room" id="<%=id%>"><%= name %>
+	<p><%= data %></p>
+	<p><%= users %></p>
+      </a>
     </script>
 
     <script type='text/template' id="room-chat-template">
       <div class="tab-pane" id="tab<%=id%>">
 	<div class="nano">
-	    <ul class="content list-unstyled chatList" id="chatList">
+	  <ul class="content list-unstyled chatList" id="chatList">
 	    
-	    </ul>
+	  </ul>
 	</div>
 
 	<form>
@@ -84,6 +84,16 @@
 	</form>
       </div>
     </script>
+
+    <script type='text/template' id="room-game-template">
+      <div class="tab-pane" id="tab<%=id%>">
+	<canvas id="testcanvas" height="768" width="1024"></canvas>
+
+      </div>
+    </script>
+
+
+
 
     <script type='text/template' id="room-users-template">
       
@@ -110,13 +120,23 @@
     <script src="/bower_components/underscore/underscore.js"></script>
     <script src="/bower_components/backbone/backbone.js"></script>
 
+    <script src="/bower_components/easeljs/lib/easeljs-0.7.1.min.js"></script>
+    <script src="/bower_components/createjs-tweenjs/lib/tweenjs-0.5.1.min.js"></script>
+
     <script src="/js/lib/hmac-sha1.js"></script>
     <script src="/js/lib/appwarp.js"></script>
     <script src="/js/lib/jquery.nanoscroller.js"></script>
 
     <script src="/js/warpclient.js"></script>
 
+    <script src="/js/util.js"></script>
+    <script src="/js/constants.js"></script>
+    <script src="/js/views/ui/ui.js"></script>
+    <script src="/js/views/ui/sprites.js"></script>
+
+    <script src="/js/models/game.js"></script>
     <script src="/js/models/main.js"></script>
+    <script src="/js/views/game.js"></script>
     <script src="/js/views/main.js"></script>
     <script src="/js/main.js"></script>
 

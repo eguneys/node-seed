@@ -1,0 +1,72 @@
+var RoomGameView = Backbone.View.extend({
+    template: _.template($('#room-game-template').html()),
+    
+    initialize: function(options) {
+	this.vent = options.vent;
+	
+	this.model.on("change:Player0", this.renderPlayer, this);
+	this.model.on("change:Player1", this.renderPlayer, this);
+	this.model.on("change:Player2", this.renderPlayer, this);
+	this.model.on("change:Player3", this.renderPlayer, this);
+	this.model.on("change:MySide", this.renderPlayer, this);
+	this.model.on("change:Rake", this.renderRake, this);
+	this.model.on("change:drawMiddleStone", this.renderDrawMiddleStone, this);
+	this.model.on("change:drawBottomStone", this.renderDrawBottomStone, this);
+    },
+
+    renderDrawMiddleStone: function(model) {
+	this.gameView.drawMiddleStone(this.model.get("drawMiddleStone"));
+    },
+
+    renderDrawBottomStone: function(model) {
+	this.gameView.drawBottomStone();
+    },
+
+    renderRake: function(model) {
+	this.gameView.buildStones(this.model.get("Rake"));
+    },
+
+    renderPlayer: function(model) {
+	for (i =0; i< 4; i++) {
+	    var relativeSide = DIRECTION_TOTAG[RelativeSide(this.model.get("MySide"), i)];
+	    this.gameView.updatePlayer(this.model.get("Player"+ i), relativeSide);
+	}
+    },
+    
+    render: function() {
+	this.setElement(this.template({ id : this.model.get('room').getRoomId() }));
+	return this;
+    },
+
+    buildScene: function() {
+	this.stage = new createjs.Stage('testcanvas');
+	this.stage.enableMouseOver(20);
+	
+	this.gameView = new GameView(this.stage);
+	this.bindGameViewEvents();
+	this.gameView.buildScene();
+    },
+
+    bindGameViewEvents: function() {
+	this.gameView.Events.drawMiddleStone.attach(function() {
+	    this.vent.trigger("drawMiddleStone");
+	}, this);
+
+	this.gameView.Events.drawBottomStone.attach(function() {
+	    this.vent.trigger("drawBottomStone");
+	}, this);
+
+	this.gameView.Events.throwStone.attach(function(stone) {
+	    this.vent.trigger("throwStone", stone);
+	}, this);
+
+    }
+    
+});
+
+
+var RelativeSide = function(myside, side) {
+    var delta = myside - BOTTOM;
+
+    return (side - delta + 4) % 4;
+}
