@@ -13,8 +13,10 @@ app.configure(function() {
 });
 
 
-var port = process.env.PORT || 3000;
+var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000;
 
-app.listen(port, function() {
+var ip = process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0";
+
+app.listen(port, ip, function() {
     console.log(' - listening on ' + port);
 });

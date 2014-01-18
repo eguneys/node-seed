@@ -1,0 +1,11 @@
+{
+    "name": "my-project",
+    "version": "1.0.0",
+    "dependencies": {
+	"jquery": "latest",
+	"underscore": "latest",
+	"backbone": "latest",
+	"easeljs": "latest",
+	"createjs-tweenjs": "latest"
+    }
+}

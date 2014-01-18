@@ -8,7 +8,7 @@
   },
 
   "scripts": {
-      "start": "node app/scripts/web"
+      "start": "./setup.sh"
   },
   "author": "",
   "license": "BSD"
