@@ -1,0 +1,3 @@
+var RoomGameSideView = Backbone.View.extend({
+    
+});

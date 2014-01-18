@@ -7,5 +7,8 @@ GameConstants = {
     ME_THROW_CARD: 7,
     ME_FINISHED: 8,
 
-    ME_DRAW_CARD_MIDDLE_INFO: 10
+    ME_DRAW_CARD_MIDDLE_INFO: 10,
+
+    GAME_STARTINFO: 12
+    
 }

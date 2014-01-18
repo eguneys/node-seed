@@ -34,7 +34,7 @@
     </div>
 
     <script type='text/template' id="home-template">
-            <div class="row">
+      <div class="row">
 	<div class="col-lg-2">
 	  <div class="panel panel-default">
 	    <div class="panel-heading">
@@ -56,10 +56,23 @@
 	  <div class="tab-content" id="roomTabContents">
 
 	    <div class="tab-pane active" id="HomeTab">
-	      <button class="btn btn-default" id="PlayNow"> Play now </button>
+	      <div class="row">
+		<div class="col-lg-6">
+		  <button class="btn btn-default" id="PlayNow"> Play now </button>
+		</div>
+		<div class="col-lg-6">
+		<div class="nano">
+		  <div class="content">
+		    <ul class="list-group" id="gameList">
+		    </ul>
+		  </div>
+		</div>
+	      </div>
+
 	    </div>
 	  </div>
-	  
+
+
 	</div>
       </div>
     </script>
@@ -90,6 +103,27 @@
 	<canvas id="testcanvas" height="768" width="1024"></canvas>
 
       </div>
+    </script>
+
+    <script type='text/template' id="game-sideview-template">
+      	<div class="row">
+	  <div class="col-lg-6">
+	      <form>
+		<input class="form-control input-block" type="text" placeholder="Chat" id="gameChatInput">
+	      </form>
+	      <div class="nano">
+		<ul class="content list-unstyled chatList" id="roomChatList">
+		</ul>
+	      </div>
+	  </div>
+	  <div class="col-lg-6">
+	    <div class="nano">
+	      <ul class="content list-unstyled userList" id="roomUserList">
+		
+	      </ul>
+	    </div>
+	  </div>
+	</div>
     </script>
 
 
@@ -136,6 +170,7 @@
 
     <script src="/js/models/game.js"></script>
     <script src="/js/models/main.js"></script>
+    <script src="/js/views/sidecontrol.js"></script>
     <script src="/js/views/game.js"></script>
     <script src="/js/views/main.js"></script>
     <script src="/js/main.js"></script>

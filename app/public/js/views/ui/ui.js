@@ -82,6 +82,7 @@ function GameEvents (base) {
     self.drawMiddleStone = new Event(self.base);
     self.drawBottomStone = new Event(self.base);
     self.throwStone = new Event(self.base);
+    self.endGame = new Event(self.base);
 
     self.sitTable = new Event(self.base);
 }
@@ -233,11 +234,11 @@ function GameView(stage) {
     }
 
     self.buildStone = function(s) {
-	//if (s.number == 14)
-	//    return self.buildFakeStone();
+	if (s == 4 * 13 + 1)
+	    return self.buildFakeStone();
 	
 	var shape = new createjs.Sprite(self.stoneSheet);
-	shape.gotoAndStop(s);
+	shape.gotoAndStop(s - 1);
 	shape.scaleX = 1.5;
 	shape.scaleY = 1.5;
 	shape.data = s;
@@ -264,7 +265,7 @@ function GameView(stage) {
 	shape.scaleX = 1.5;
 	shape.scaleY = 1.5;
 
-	shape.data = {number: 14}
+	shape.data = 4 * 13 + 1;
 	
 	return shape;
     }
@@ -290,6 +291,19 @@ function GameView(stage) {
 	self.middleStones.MIDDLE = stone;
     }
 
+    self.buildGostergeStone = function(s) {
+	var stone = self.buildStone(s);
+
+	var ox = rakeStartX + rakeWidth / 2 - ( stoneWidth + stoneGapX);
+	var oy = rakeStartY / 2;
+
+	stone.x = ox;
+	stone.y = oy;
+
+	self.middleStones.MIDDLE2 = stone;
+
+	self.middleStoneContainer.addChild(stone);
+    }
     
 
     self.buildThrowStone = function (x, y) {
@@ -316,7 +330,7 @@ function GameView(stage) {
 
 	
     }
-    
+
     self.buildRake = function () {
 	var shape = new createjs.Shape();
 
@@ -327,7 +341,20 @@ function GameView(stage) {
 	self.rake = shape;
     }
 
+    self.clearStones = function() {
+	var stonesClone = [];
+	self.stoneS.forEach(function(item) {
+	    stonesClone.push(item);
+	});
+
+	stonesClone.forEach(function(item) {
+	    self.rakeRemoveStone(item);
+	});
+    }
+
     self.buildStones = function (stones) {
+	self.clearStones();
+	
 	var drop = { x: rakeStartX, y: rakeStartY }
 	stones.forEach(function(item) {
 	    self.rakeAddStone(item, drop);
@@ -395,6 +422,21 @@ function GameView(stage) {
 
     }
 
+    self.getStones = function() {
+	var clone = [];
+	for (var i in self.stoneS) clone.push(self.stoneS[i]);
+
+	var groups =  GroupStones(clone, stoneWidth + stoneGapX - 5);
+
+	for (var g in groups) {
+	    groups[g] = groups[g].map(function(item) {
+		return item.data;
+	    });
+	}
+
+	return groups;
+    }
+
     self.rakeRemoveStone = function(stone) {
 	self.stoneS.splice(self.stoneS.indexOf(stone), 1);
 	self.stoneContainer.removeChild(stone);
@@ -410,7 +452,13 @@ function GameView(stage) {
 	    if (self.middleStones.BOTTOM.hitTest(s.x + stoneWidth / 2, s.y + stoneHeight / 2)) {
 		self.lastThrowStone = s;
 		self.Events.throwStone.notify(s);
+	    } else {
+		var point = self.middleStones.MIDDLE2.globalToLocal(s.x + stoneWidth /2, s.y+stoneHeight / 2);
+		if (self.middleStones.MIDDLE2.hitTest(point.x,point.y)) {
+		    self.Events.endGame.notify(s);
+		}
 	    }
+
 	});
 
 	if (drop) {

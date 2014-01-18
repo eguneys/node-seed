@@ -3,8 +3,8 @@ var MainApp = function(options) {
 
     self.eventBus = options.eventBus;
 
-    self.apiKey = "9941f8f9-bfb7-4c23-b";
-    self.secretKey = "localhost";
+    self.apiKey = "ea34a260-02df-4362-b";
+    self.secretKey = "54.201.221.152";
     
     self.connect = function(nameId) {
 	AppWarp.WarpClient.initialize(self.apiKey, self.secretKey);
@@ -58,6 +58,7 @@ var MainApp = function(options) {
 	_warpclient.setNotifyListener(AppWarp.Events.onChatReceived, self.ResponseHandlers.onChatReceived);
 
 	_warpclient.setNotifyListener(AppWarp.Events.onUserJoinedRoom, self.ResponseHandlers.onUserJoinedRoom);
+	_warpclient.setNotifyListener(AppWarp.Events.onUserLeftRoom, self.ResponseHandlers.onUserLeftRoom);
 	_warpclient.setNotifyListener(AppWarp.Events.onGameStarted, self.ResponseHandlers.onGameStarted);
 	_warpclient.setNotifyListener(AppWarp.Events.onMoveCompleted, self.ResponseHandlers.onMoveCompleted);
     }
@@ -138,6 +139,10 @@ var ResponseHandlers = function(warpClient, eventBus) {
     // Notify Listeners
     self.onChatReceived = function(chat) {
 	self._eventBus.trigger("chatReceived", chat);
+    };
+
+    self.onUserLeftRoom = function(room, user) {
+	self._eventBus.trigger("userLeftRoom", { room: room, username: user });
     };
 
     self.onUserJoinedRoom = function(room, user) {

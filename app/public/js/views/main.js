@@ -11,6 +11,7 @@ var ContainerView = Backbone.View.extend({
 	var view = this.model.get('viewState');
 	this.$el.html(view.render().el);
     }
+
 });
 
 
@@ -41,7 +42,8 @@ var HomeView = Backbone.View.extend({
 
     events: {
 	'click .room': 'onRoomClick',
-	'click #PlayNow': 'onPlayClick'
+	'click #PlayNow': 'onPlayClick',
+	'click .chatRoom': 'onChatRoomClick'
     },
     
     initialize: function(options) {
@@ -49,6 +51,8 @@ var HomeView = Backbone.View.extend({
 
 	this.model.submodels.liveRooms.on("add", this.renderRoomListView, this);
 	this.model.submodels.joinedRooms.on("add", this.renderRoomTabView, this);
+
+	this.model.submodels.chatRooms.on("add", this.renderChatRoom, this);
 
 	this.model.submodels.gameRooms.on("add", this.renderGameRoom, this);
     },
@@ -71,7 +75,9 @@ var HomeView = Backbone.View.extend({
     renderRoomListView: function(room) {
 	    var room = room.get('room');
 	    var template = _.template($('#room-listview-template').html());
-	    this.$("#roomList").append(template({id: room.getRoom().getRoomId(), name: room.getRoom().getName(), data: room.getCustomData(), users: room.getUsers()}));
+	    this.$("#gameList").append(template({id: room.getRoom().getRoomId(), name: room.getRoom().getName(), data: room.getCustomData(), users: room.getUsers()}));
+
+	this.$('.nano').nanoScroller();
     },
 
     renderRoomTabView: function(roomM) {
@@ -85,6 +91,13 @@ var HomeView = Backbone.View.extend({
 	    this.$("#roomTabContents").append(chatViewEl);
     },
 
+    renderChatRoom: function(roomM) {
+	var room = roomM.get('room');
+	var template = _.template("<a class='list-group-item'><%= name %></a>");
+
+	this.$("#roomList").append(template({name: room.getRoom().getName() }));
+    },
+
     render: function() {
 	this.$el.html(this.template());
 	
@@ -95,6 +108,11 @@ var HomeView = Backbone.View.extend({
 	this.model.submodels.joinedRooms.each(function(roomM) {
 	    this.renderRoomTabView(roomM);
 	});
+
+	this.model.submodels.chatRooms.each(function(roomM) {
+	    this.renderChatRoom(roomM);
+	});
+	
 	return this;
     },
 
@@ -143,9 +161,8 @@ var RoomChatView = Backbone.View.extend({
 	
 	var newChat = this.$("#chatList").append(template({chat: newMessage.getChat(), sender: newMessage.getSender()}));
 
-	
-	$('.nano').nanoScroller();
-	$('.nano').nanoScroller({ scroll: 'bottom'});
+
+	$('.nanoBottom').nanoScroller({ scroll: 'bottom'});
 	
 	
     },

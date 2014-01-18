@@ -14,7 +14,12 @@ var GameRoomModel = Backbone.Model.extend({
 	drawMiddleStone: -1,
 	drawSideStone: -1,
 	throwStone: -1,
+	gostergeStone: -1,
 	Turn: 0,
+    },
+
+    submodels: {
+	sidemodel: null
     },
 
     addPlayer: function(user) {
@@ -23,6 +28,37 @@ var GameRoomModel = Backbone.Model.extend({
 	this.set("Player" + playerCount, { name: user });
 	
 	this.set("PlayerCount" , ++playerCount);
+    },
+
+    removePlayer: function(user) {
+	
+	var playerCount = this.get("PlayerCount");
+
+	var side = this.getSide(user);
+
+
+	var myside = this.get("MySide");
+	if (myside > side) {
+	    this.set("MySide", myside -1);
+	}
+	
+	while (side < playerCount - 1) {
+	    var player = this.get("Player" + ((side - 0) + 1));
+	    this.set("Player" + side, player);
+	    ++side;
+	}
+
+	this.set("Player" + side, { name: "empty" });
+
+	
+	this.set("PlayerCount", --playerCount);
+	
+    },
+
+    debugPlayers: function() {
+	for (var i in [0, 1, 2, 3]) {
+	    console.log(this.get("Player" + i));
+	}
     },
 
     initRake: function(rake) {
@@ -42,9 +78,9 @@ var GameRoomModel = Backbone.Model.extend({
 	return this.getSide(this.get("Turn"));
     },
 
-    getSide: function(side) {
+    getSide: function(name) {
 	for (var i in [0, 1, 2, 3]) {
-	    if (this.get("Player" + i).name == side) {
+	    if (this.get("Player" + i).name == name) {
 		return i;
 	    }
 	}
@@ -58,4 +94,12 @@ var GameRoomModel = Backbone.Model.extend({
 	
     }
     
+});
+
+
+var GameSideModel = Backbone.Model.extend({
+    defaults: {
+	lastChat: {}
+	
+    }
 });

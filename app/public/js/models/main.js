@@ -36,7 +36,8 @@ var HomeModel = Backbone.Model.extend({
     submodels: {
 	liveRooms: new RoomCollection(),
 	joinedRooms: new RoomCollection(),
-	gameRooms: new GameRoomCollection()
+	gameRooms: new GameRoomCollection(),
+	chatRooms: new RoomCollection(),
     },
     
     initialize: function() {
